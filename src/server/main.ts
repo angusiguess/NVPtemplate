@@ -32,11 +32,14 @@ const loop = function () {
 
     // Updates go here
 
+    NengiServer.instance.update()
+
     if (highResolutionTimeStamp() - previous < tickLengthMs - 4) {
         setTimeout(loop, 0)
     } else {
         setImmediate(loop)
     }
+
 }
 
 loop()

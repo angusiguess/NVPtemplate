@@ -21,7 +21,7 @@ export function startGame() {
         const now = highResolutionTimeStamp()
         const delta = (now - previous) / 1000
         previous = now
-        NengiClient.instance.readNetworkAndEmit()
+        NengiClient.instance.readNetwork()
         NengiClient.instance.update()
         window.requestAnimationFrame(loop)
     }
