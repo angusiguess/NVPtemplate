@@ -1,5 +1,5 @@
 import { nengiConfig } from '../shared/nengi-config'
-import { ServerNengi } from './networking/server-nengi'
+import { NengiServer } from './networking/nengi-server'
 
 function highResolutionTimeStamp() {
     const time = process.hrtime()
@@ -10,12 +10,16 @@ let tick = 0
 let previous = highResolutionTimeStamp()
 const tickLengthMs = 1000 / nengiConfig.UPDATE_RATE
 
-ServerNengi.init()
+NengiServer.init()
 
-ServerNengi.instance.on('connect', async ({ client, data, callback }) => {
+NengiServer.instance.on('connect', async ({ client, callback }) => {
     console.log('Client Connected')
     console.log(client)
-    console.log(data)
+    callback({ accepted: true, text: 'Welcome!' })
+})
+
+NengiServer.instance.on('disconnect', client => {
+
 })
 
 const loop = function () {

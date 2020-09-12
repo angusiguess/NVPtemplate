@@ -1,18 +1,17 @@
 import nengi, { Client } from 'nengi'
 import { nengiConfig } from '../shared/nengi-config'
-import { ClientNengi } from './networking/client-nengi'
+import { NengiClient } from './networking/nengi-client'
 
 function highResolutionTimeStamp() {
-    const time = process.hrtime()
-    return time[0] * 1000 + time[1] / 1000000
+    return performance.now()
 }
 
-ClientNengi.init()
+NengiClient.init()
 
-ClientNengi.instance.on('connected', res => { console.log('connection?:', res) })
-ClientNengi.instance.on('disconnected', () => { console.log('connnection closed') })
+NengiClient.instance.on('connected', res => { console.log('connection?:', res) })
+NengiClient.instance.on('disconnected', () => { console.log('connnection closed') })
 
-ClientNengi.instance.connect('ws://localhost:8000')
+NengiClient.instance.connect('ws://localhost:8000')
 
 // Update loop
 export function startGame() {
@@ -22,9 +21,9 @@ export function startGame() {
         const now = highResolutionTimeStamp()
         const delta = (now - previous) / 1000
         previous = now
+        NengiClient.instance.readNetworkAndEmit()
+        NengiClient.instance.update()
+        window.requestAnimationFrame(loop)
     }
 
 }
-
-ClientNengi.instance.readNetworkAndEmit()
-ClientNengi.instance.update()

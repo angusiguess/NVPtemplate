@@ -1,3 +1,5 @@
+.cache
 .nvmrc
+dist
 node_modules
 out
