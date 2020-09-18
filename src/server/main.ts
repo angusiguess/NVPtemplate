@@ -12,16 +12,6 @@ const tickLengthMs = 1000 / nengiConfig.UPDATE_RATE
 
 NengiServer.init()
 
-NengiServer.instance.on('connect', async ({ client, callback }) => {
-    console.log('Client Connected')
-    console.log(client)
-    callback({ accepted: true, text: 'Welcome!' })
-})
-
-NengiServer.instance.on('disconnect', client => {
-
-})
-
 const loop = function () {
     const now = highResolutionTimeStamp()
     if (previous + tickLengthMs <= now) {

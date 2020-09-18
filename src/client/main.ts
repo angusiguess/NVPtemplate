@@ -14,7 +14,8 @@ NengiClient.instance.on('disconnected', () => { console.log('connnection closed'
 NengiClient.instance.connect('ws://localhost:8000')
 
 // Update loop
-export function startGame() {
+window.onload = () => {
+    console.log('window loaded')
     let previous = highResolutionTimeStamp()
 
     const loop = () => {
@@ -26,4 +27,5 @@ export function startGame() {
         window.requestAnimationFrame(loop)
     }
 
+    loop()
 }

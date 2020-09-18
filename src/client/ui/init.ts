@@ -1,7 +1,4 @@
-import { startGame } from '../main'
+import '../main'
 
 async function init() {
-    startGame()
 }
-
-init()
