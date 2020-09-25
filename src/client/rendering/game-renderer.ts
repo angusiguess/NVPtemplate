@@ -10,8 +10,8 @@ export default class GameRenderer {
 		return GameRenderer._instance
 	}
 
-	renderer: Renderer
-	canvas: HTMLCanvasElement
+	renderer!: Renderer
+	canvas!: HTMLCanvasElement
 
 	backgroundLayer: Container = new Container()
 
