@@ -9,8 +9,8 @@ export const nengiConfig = {
     ID_PROPERTY_NAME: 'nid',
     TYPE_PROPERTY_NAME: 'ntype',
 
-    USE_HISTORIAN: true,
-    HISTORIAN_TICKS: 40,
+    USE_HISTORIAN: false,
+    HISTORIAN_TICKS: 2,
 
     protocols: {
         entities: [

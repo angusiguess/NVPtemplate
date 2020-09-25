@@ -4,7 +4,7 @@
   "description": "A template for a client-server nengi/pixi/vue game",
   "main": "index.js",
   "scripts": {
-    "client": "parcel src/client/ui/index.html",
+    "client": "parcel serve src/client/ui/index.html --port=4040",
     "server": "npx ts-node-dev --rs false --inspect --respawn --debounce 2000 src/server/main.ts",
     "start": "npx concurrently \"npm:server\" \"npm:client\"",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -30,5 +30,9 @@
     "nengi": "^1.17.0",
     "pixi.js": "^5.3.3",
     "vue": "^2.6.12"
+  },
+  "staticFiles": {
+    "staticPath": "assets",
+    "watcherGlob": "**"
   }
 }
