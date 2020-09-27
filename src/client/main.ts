@@ -12,6 +12,8 @@ function highResolutionTimeStamp() {
 NengiClient.init()
 NengiClient.instance.connect('ws://localhost:8000')
 
+const state = {}
+
 // Update loop
 window.onload = () => {
     logger.log('### Window loaded')

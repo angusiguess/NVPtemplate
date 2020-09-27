@@ -1,4 +1,4 @@
-import { autoDetectRenderer, Renderer, Container } from 'pixi.js'
+import { autoDetectRenderer, Renderer, Container, TilingSpriteRenderer } from 'pixi.js'
 import Sprite from './sprite'
 
 export default class GameRenderer {
@@ -42,6 +42,12 @@ export default class GameRenderer {
 
 	onResize() {
 		this.renderer.resize(this.canvas.width, this.canvas.height)
+	}
+
+	public addPlayer() {
+		const playerSprite = new Sprite('./characters/eyeball_1.png')
+		playerSprite.position.set(200, 200)
+		this.backgroundLayer.addChild(playerSprite)
 	}
 
 	createDummySprites() {
