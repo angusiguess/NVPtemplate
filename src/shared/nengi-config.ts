@@ -1,4 +1,5 @@
 import nengi from 'nengi'
+import { LoginNotice } from './messages/LoginNotice'
 
 export const nengiConfig = {
     UPDATE_RATE: 20,
@@ -17,6 +18,7 @@ export const nengiConfig = {
         ],
         localMessages: [],
         messages: [
+            ['LoginNotice', LoginNotice]
         ],
         commands: [
         ],
