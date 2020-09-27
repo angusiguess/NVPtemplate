@@ -2,9 +2,15 @@ import { EventEmitter } from 'events'
 import nengi from 'nengi'
 import { nengiConfig } from '../../shared/nengi-config'
 import { serverHooks } from './server-hooks'
+import { LoginNotice } from '../../shared/messages/LoginNotice'
 
 export class NengiServer {
     public static instance: nengi.Instance
+
+    static update(delta, tick, now) {
+        NengiServer.instance.emitCommands()
+        NengiServer.instance.update()
+    }
 
     static init() {
         // TODO Parameterize port
@@ -17,6 +23,7 @@ export class NengiServer {
             console.log('Client Connected')
             console.log(client)
             callback({ accepted: true, text: 'Welcome!' })
+            instance.message(new LoginNotice('whoa there pilgrim, looks like you\'re loggin in'), client)
         })
 
         instance.on('disconnect', client => {

@@ -14,15 +14,16 @@ NengiServer.init()
 
 const loop = function () {
     const now = highResolutionTimeStamp()
+    let delta
     if (previous + tickLengthMs <= now) {
-        const delta = (now - previous) / 1000
+        delta = (now - previous) / 1000
         previous = now
         tick++
     }
 
     // Updates go here
 
-    NengiServer.instance.update()
+    NengiServer.update(delta, tick, now)
 
     if (highResolutionTimeStamp() - previous < tickLengthMs - 4) {
         setTimeout(loop, 0)

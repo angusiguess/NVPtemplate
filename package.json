@@ -29,6 +29,7 @@
     "last 1 Chrome versions"
   ],
   "dependencies": {
+    "concurrently": "^5.3.0",
     "nengi": "^1.17.0",
     "pixi.js": "^5.3.3",
     "ts-vue-plugin": "^0.1.3",

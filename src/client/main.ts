@@ -10,8 +10,6 @@ function highResolutionTimeStamp() {
 }
 
 NengiClient.init()
-NengiClient.instance.on('connected', res => { console.log('connection?:', res) })
-NengiClient.instance.on('disconnected', () => { console.log('connnection closed') })
 NengiClient.instance.connect('ws://localhost:8000')
 
 // Update loop
@@ -25,8 +23,8 @@ window.onload = () => {
         const now = highResolutionTimeStamp()
         const delta = (now - previous) / 1000
         previous = now
-        NengiClient.instance.readNetwork()
-        NengiClient.instance.update()
+        NengiClient.instance.readNetworkAndEmit()
+        NengiClient.update(delta, now)
         GameRenderer.instance.update(delta, now)
         window.requestAnimationFrame(loop)
     }
