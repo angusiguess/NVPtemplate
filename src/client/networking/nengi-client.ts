@@ -6,7 +6,7 @@ import { LoginNotice } from '../../shared/messages/LoginNotice'
 export class NengiClient {
     public static instance: nengi.Client
 
-    static update(delta, now) {
+    static update(delta: number, now: number) {
         this.instance.update()
     }
 
