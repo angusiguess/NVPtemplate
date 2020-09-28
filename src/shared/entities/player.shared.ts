@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 type uuid = string
 
-export class Player {
+export class SharedPlayer {
     nid?: number
     id: uuid
     x: number
@@ -17,7 +17,7 @@ export class Player {
 
     constructor() {
         this.id = uuidv4()
-        this.x = 200
-        this.y = 200
+        this.x = 20
+        this.y = 20
     }
 }

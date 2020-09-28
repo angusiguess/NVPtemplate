@@ -1,6 +1,6 @@
 import nengi from 'nengi'
 import { LoginNotice } from './messages/LoginNotice'
-import { Player } from './entities/Player'
+import { SharedPlayer } from './entities/player.shared'
 
 export const nengiConfig = {
     UPDATE_RATE: 20,
@@ -16,7 +16,7 @@ export const nengiConfig = {
 
     protocols: {
         entities: [
-            ['Player', Player]
+            ['SharedPlayer', SharedPlayer]
         ],
         localMessages: [],
         messages: [

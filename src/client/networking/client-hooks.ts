@@ -52,7 +52,7 @@ export function clientHooks(client, hooks) {
     })
 
     // create entities and invoke their hooks
-    client.on('create', data => {
+    client.on('create', (data) => {
         // construct the entity (nengiConfig constructor)
         const name = data.protocol.name
         const constructor = constructors[name]
@@ -62,6 +62,10 @@ export function clientHooks(client, hooks) {
         const entity = new constructor(data)
         Object.assign(entity, data)
         client.entities.set(entity.nid, entity)
+        console.log({entity, data})
+        if(entity.sprite) {
+            client.graphicalEntities.set(entity.nid, entity.sprite)
+        }
 
         // construct the client entity (from hooks)
         if (client.hooks) {
@@ -84,16 +88,18 @@ export function clientHooks(client, hooks) {
     })
 
     // update entities and invoke their hooks
-    client.on('update', update => {
+    client.on('update', (update) => {
         if (client.entityUpdateFilter && client.entityUpdateFilter(update)) {
             //console.log('ignore', update)
             return
         }
         const entity = client.entities.get(update.nid)
+        console.log(client.entities, { update, entity })
         if (entity) {
             entity[update.prop] = update.value
+            console.log({entity})
         } else {
-            console.log('tried to update a sim that did not exist')
+            console.log(`Hooks tried to update an entity that did not exist: ${update.nid}`)
         }
         const graphics = client.graphicalEntities.get(update.nid)
         if (graphics) {
@@ -107,13 +113,13 @@ export function clientHooks(client, hooks) {
             }
 
         } else {
-            console.log('tried to update an entity that did not exist')
+            console.log(`Hooks tried to update a graphical entity that did not exist: ${update.nid}`)
         }
     })
 
 
     // delete entities and invoke their hooks
-    client.on('delete', nid => {
+    client.on('delete', (nid) => {
         const entity = client.entities.get(nid)
         const graphics = client.graphicalEntities.get(nid)
         const name = graphics.protocol.name
@@ -122,14 +128,14 @@ export function clientHooks(client, hooks) {
         if (client.entities.has(nid)) {
             client.entities.delete(nid)
         } else {
-            console.log('tried to delete an entity that did not exist')
+            console.log(`Hooks tried to delete an entity that did not exist: ${nid}`)
         }
 
         if (client.graphicalEntities.has(nid)) {
             client.graphicalEntities.delete(nid)
             hooks.delete({ nid, entity, graphics })
         } else {
-            console.log('tried to delete an entity that did not exist')
+            console.log(`Hooks tried to delete a graphical entity that did not exist: ${nid}`)
         }
     })
 }

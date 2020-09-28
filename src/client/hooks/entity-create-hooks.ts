@@ -1,7 +1,7 @@
-import playerHooks from './player-hooks'
+import { ClientPlayerHooks } from '../entities/player.client'
 
 export function createHooks(state) {
     return {
-        'Player': playerHooks(state)
+        'SharedPlayer': ClientPlayerHooks(state)
     }
 }

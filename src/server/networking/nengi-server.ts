@@ -3,7 +3,7 @@ import nengi from 'nengi'
 import { nengiConfig } from '../../shared/nengi-config'
 import { serverHooks } from './server-hooks'
 import { LoginNotice } from '../../shared/messages/LoginNotice'
-import { Player } from '../../shared/entities/Player'
+import { ServerPlayer } from '../entities/player.server'
 
 export class NengiServer {
     public static instance: nengi.Instance
@@ -31,16 +31,25 @@ export class NengiServer {
         instance.on('connect', ({ client, callback }) => {
             console.log('Client Connected')
             console.log(client)
-            callback({ accepted: true, text: 'Welcome!' })
+            callback({ accepted: true, text: 'Welcome!' }) // just send their identity packet here, no separate message
 
-            const entity = new Player()
+            const entity = new ServerPlayer()
             instance.addEntity(entity)
             if(entity.nid) {
                 NengiServer.entities.set(entity.nid, entity)
             }
             client.entity = entity
 
-            instance.message(new LoginNotice('whoa there pilgrim, looks like you\'re loggin in'), client)
+            client.view = {
+                x: entity.x,
+                y: entity.y,
+                halfWidth: 700,
+                halfHeight: 500,
+            }
+            console.log(client.view, {entity})
+
+
+            instance.message(new LoginNotice(`whoa there pilgrim, looks like you're loggin in`), client)
         })
 
         instance.on('disconnect', client => {
