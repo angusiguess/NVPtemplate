@@ -17,9 +17,12 @@ export class ClientPlayer extends SharedPlayer {
 
 export function ClientPlayerHooks(state) {
     return {
-        create({ data, entity }) {
-			const player = new ClientPlayer(entity)
-			GameRenderer.instance.backgroundLayer.addChild(player.sprite)
+        create({ data, entity }: { data: any, entity: ClientPlayer }) {
+			GameRenderer.instance.backgroundLayer.addChild(entity.sprite)
+			return {
+				entity,
+				graphics: entity.sprite
+			}
         },
         delete({ nid, entity, graphics }) {
 			GameRenderer.instance.backgroundLayer.removeChild(graphics)
@@ -28,13 +31,6 @@ export function ClientPlayerHooks(state) {
 			// propName: ({ value, entity, graphics }) => {
 			// 	// do thing
 			// },
-			x: ({ value, entity, graphics }) => {
-				if(graphics) {
-					graphics.rotation += 5
-					console.log(graphics.rotation)
-				}
-				// do thing
-			},
         }
     }
 }

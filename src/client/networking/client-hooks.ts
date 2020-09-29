@@ -64,9 +64,9 @@ export function clientHooks(client, hooks) {
         }
 
         if (hooks) {
-            const graphics = hooks.create({ data, entity })
+            const { graphics } = hooks.create({ data, entity })
             if (graphics) {
-                Object.assign(graphics, data)
+                Object.assign(graphics, data) //TODO: this is probably dangerous?
             }
             if (hooks.watch) {
                 data.protocol.keys.forEach(prop => {
@@ -87,15 +87,14 @@ export function clientHooks(client, hooks) {
         const entity = client.entities.get(update.nid)
         const name = entity.protocol.name
         if (entity) {
+            // console.log(`[${update.nid}] updated ${update.prop} from ${entity[update.prop]} to ${update.value}`)
             entity[update.prop] = update.value
         } else {
             console.log(`Hooks tried to update an entity that did not exist: ${update.nid}`)
         }
 
         const graphics = client.graphicalEntities.get(update.nid)
-        console.log({ update, entity, graphics })
         if (graphics) {
-            console.log(`[${update.nid}] updated ${update.prop} from ${graphics[update.prop]} to ${update.value}`)
             graphics[update.prop] = update.value
         } else {
             console.log(`Hooks tried to update a graphical entity that did not exist: ${update.nid}`)
