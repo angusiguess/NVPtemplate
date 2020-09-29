@@ -58,6 +58,25 @@ export class NengiServer {
             instance.removeEntity(client.entity)
             console.log('Client Disconnected')
         })
+
+        instance.on('command::PlayerInput', ({ command, client }) => {
+            const { up, down, left, right, delta } = command
+            const { entity } = client
+            const speed = 200
+            if (up) {
+                entity.y -= speed * delta
+            }
+            if (down) {
+                entity.y += speed * delta
+            }
+            if (left) {
+                entity.x -= speed * delta
+            }
+            if (right) {
+                entity.x += speed * delta
+            }
+        })
+        
         NengiServer.instance = instance
     }
 }
