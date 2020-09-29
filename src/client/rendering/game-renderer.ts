@@ -44,12 +44,6 @@ export default class GameRenderer {
 		this.renderer.resize(this.canvas.width, this.canvas.height)
 	}
 
-	public addPlayer(entityData) {
-		const playerSprite = new Sprite('./characters/eyeball_1.png')
-		playerSprite.position.set(entityData.x, entityData.y)
-		this.backgroundLayer.addChild(playerSprite)
-	}
-
 	createDummySprites() {
 		const derpySprite = new Sprite('./characters/eyeball_1.png')
 		derpySprite.position.set(100, 50)

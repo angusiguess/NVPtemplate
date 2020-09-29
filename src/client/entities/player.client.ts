@@ -21,14 +21,20 @@ export function ClientPlayerHooks(state) {
 			const player = new ClientPlayer(entity)
 			GameRenderer.instance.backgroundLayer.addChild(player.sprite)
         },
-        delete({ nid, graphics }) {
+        delete({ nid, entity, graphics }) {
+			GameRenderer.instance.backgroundLayer.removeChild(graphics)
         },
         watch: {
-			x: (entity, newValue) => {
-				console.log({newValue})
+			// propName: ({ value, entity, graphics }) => {
+			// 	// do thing
+			// },
+			x: ({ value, entity, graphics }) => {
+				if(graphics) {
+					graphics.rotation += 5
+					console.log(graphics.rotation)
+				}
+				// do thing
 			},
         }
     }
 }
-
-// how about update hooks?

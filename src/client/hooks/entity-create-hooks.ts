@@ -1,7 +1,10 @@
-import { ClientPlayerHooks } from '../entities/player.client'
+import { ClientPlayerHooks, ClientPlayer } from '../entities/player.client'
 
 export function createHooks(state) {
     return {
-        'SharedPlayer': ClientPlayerHooks(state)
+        'SharedPlayer': {
+            constructor: ClientPlayer,
+            hooks: ClientPlayerHooks(state),
+        }
     }
 }
