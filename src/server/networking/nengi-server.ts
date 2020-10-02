@@ -14,6 +14,9 @@ export class NengiServer {
         NengiServer.instance.emitCommands()
 
         this.entities.forEach(entity => {
+            if(entity.update) {
+                entity.update(delta)
+            }
         })
 
         NengiServer.instance.update()

@@ -1,3 +1,5 @@
+import logger from "../../shared/logger"
+
 export function clientHooks(client, hooks) {
     // additions to nengi client object
     client.hooks = hooks
@@ -53,7 +55,8 @@ export function clientHooks(client, hooks) {
         // construct the client entity (from hooks)
         const { constructor, hooks } = client.hooks[name]
         if (!constructor) {
-            console.log(`No constructor found for ${name}`)
+            logger.error(`No constructor found for ${name}`)
+            return
         }
 
         const entity = new constructor(data)
@@ -81,7 +84,6 @@ export function clientHooks(client, hooks) {
     // update entities and invoke their hooks
     client.on('update', (update) => {
         if (client.entityUpdateFilter && client.entityUpdateFilter(update)) {
-            //console.log('ignore', update)
             return
         }
         const entity = client.entities.get(update.nid)
@@ -90,14 +92,14 @@ export function clientHooks(client, hooks) {
             // console.log(`[${update.nid}] updated ${update.prop} from ${entity[update.prop]} to ${update.value}`)
             entity[update.prop] = update.value
         } else {
-            console.log(`Hooks tried to update an entity that did not exist: ${update.nid}`)
+            logger.warn(`Hooks tried to update an entity that did not exist: ${update.nid}`)
         }
 
         const graphics = client.graphicalEntities.get(update.nid)
         if (graphics) {
             graphics[update.prop] = update.value
         } else {
-            console.log(`Hooks tried to update a graphical entity that did not exist: ${update.nid}`)
+            logger.warn(`Hooks tried to update a graphical entity that did not exist: ${update.nid}`)
         }
 
         const { hooks } = client.hooks[name]
@@ -118,13 +120,13 @@ export function clientHooks(client, hooks) {
         if (client.entities.has(nid)) {
             client.entities.delete(nid)
         } else {
-            console.log(`Hooks tried to delete an entity that did not exist: ${nid}`)
+            logger.error(`Hooks tried to delete an entity that did not exist: ${nid}`)
         }
 
         if (client.graphicalEntities.has(nid)) {
             client.graphicalEntities.delete(nid)
         } else {
-            console.log(`Hooks tried to delete a graphical entity that did not exist: ${nid}`)
+            logger.error(`Hooks tried to delete a graphical entity that did not exist: ${nid}`)
         }
     })
 }
