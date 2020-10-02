@@ -1,3 +1,5 @@
+import logger from "../../shared/logger"
+
 export function clientHooks(client, hooks) {
     // additions to nengi client object
     client.hooks = hooks
@@ -45,91 +47,86 @@ export function clientHooks(client, hooks) {
         })
     }
 
-    // gather constructors from nengiConfig
-    const constructors = {}
-    client.config.protocols.entities.forEach(ep => {
-        constructors[ep[0]] = ep[1]
-    })
-
     // create entities and invoke their hooks
-    client.on('create', data => {
+    client.on('create', (data) => {
         // construct the entity (nengiConfig constructor)
         const name = data.protocol.name
-        const constructor = constructors[name]
+
+        // construct the client entity (from hooks)
+        const { constructor, hooks } = client.hooks[name]
         if (!constructor) {
-            console.log(`No constructor found for ${name}`)
+            logger.error(`No constructor found for ${name}`)
+            return
         }
+
         const entity = new constructor(data)
         Object.assign(entity, data)
         client.entities.set(entity.nid, entity)
+        if(entity.sprite) {
+            client.graphicalEntities.set(entity.nid, entity.sprite)
+        }
 
-        // construct the client entity (from hooks)
-        if (client.hooks) {
-            const hooks = client.hooks[name]
-            if (hooks) {
-                const graphics = hooks.create({ data, entity })
-                if (graphics) {
-                    Object.assign(graphics, data)
-                    if (hooks.watch) {
-                        data.protocol.keys.forEach(prop => {
-                            if (hooks.watch[prop]) {
-                                hooks.watch[prop]({ value: data[prop], graphics, entity })
-                            }
-                        })
+        if (hooks) {
+            const { graphics } = hooks.create({ data, entity })
+            if (graphics) {
+                Object.assign(graphics, data) //TODO: this is probably dangerous?
+            }
+            if (hooks.watch) {
+                data.protocol.keys.forEach(prop => {
+                    if (hooks.watch[prop]) {
+                        hooks.watch[prop]({ value: data[prop], entity, graphics })
                     }
-                    client.graphicalEntities.set(graphics.nid, graphics)
-                }
+                })
             }
         }
     })
 
     // update entities and invoke their hooks
-    client.on('update', update => {
+    client.on('update', (update) => {
         if (client.entityUpdateFilter && client.entityUpdateFilter(update)) {
-            //console.log('ignore', update)
             return
         }
         const entity = client.entities.get(update.nid)
+        const name = entity.protocol.name
         if (entity) {
+            // console.log(`[${update.nid}] updated ${update.prop} from ${entity[update.prop]} to ${update.value}`)
             entity[update.prop] = update.value
         } else {
-            console.log('tried to update a sim that did not exist')
+            logger.warn(`Hooks tried to update an entity that did not exist: ${update.nid}`)
         }
+
         const graphics = client.graphicalEntities.get(update.nid)
         if (graphics) {
             graphics[update.prop] = update.value
-
-            const name = graphics.protocol.name
-            const hooks = client.hooks[name]
-
-            if (hooks.watch && hooks.watch[update.prop]) {
-                hooks.watch[update.prop]({ id: update.id, value: update.value, entity, graphics })
-            }
-
         } else {
-            console.log('tried to update an entity that did not exist')
+            logger.warn(`Hooks tried to update a graphical entity that did not exist: ${update.nid}`)
+        }
+
+        const { hooks } = client.hooks[name]
+        if (hooks?.watch && hooks.watch[update.prop]) {
+            hooks.watch[update.prop]({ id: update.id, value: update.value, entity, graphics })
         }
     })
 
 
     // delete entities and invoke their hooks
-    client.on('delete', nid => {
+    client.on('delete', (nid) => {
         const entity = client.entities.get(nid)
         const graphics = client.graphicalEntities.get(nid)
         const name = graphics.protocol.name
-        const hooks = client.hooks[name]
+        const { hooks } = client.hooks[name]
+        hooks.delete({ nid, entity, graphics })
 
         if (client.entities.has(nid)) {
             client.entities.delete(nid)
         } else {
-            console.log('tried to delete an entity that did not exist')
+            logger.error(`Hooks tried to delete an entity that did not exist: ${nid}`)
         }
 
         if (client.graphicalEntities.has(nid)) {
             client.graphicalEntities.delete(nid)
-            hooks.delete({ nid, entity, graphics })
         } else {
-            console.log('tried to delete an entity that did not exist')
+            logger.error(`Hooks tried to delete a graphical entity that did not exist: ${nid}`)
         }
     })
 }

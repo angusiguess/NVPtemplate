@@ -1,4 +1,4 @@
-import { autoDetectRenderer, Renderer, Container } from 'pixi.js'
+import { autoDetectRenderer, Renderer, Container, TilingSpriteRenderer } from 'pixi.js'
 import Sprite from './sprite'
 
 export default class GameRenderer {
@@ -46,7 +46,7 @@ export default class GameRenderer {
 
 	createDummySprites() {
 		const derpySprite = new Sprite('./characters/eyeball_1.png')
-		derpySprite.position.set(100, 100)
+		derpySprite.position.set(100, 50)
 		this.backgroundLayer.addChild(derpySprite)
 		setInterval(() => {
 			derpySprite.rotation += 0.2

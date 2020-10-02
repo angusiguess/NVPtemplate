@@ -2,6 +2,7 @@ import nengi from 'nengi'
 import { nengiConfig } from '../../shared/nengi-config'
 import { clientHooks } from './client-hooks'
 import { LoginNotice } from '../../shared/messages/LoginNotice'
+import { createHooks } from '../hooks/entity-create-hooks'
 
 export class NengiClient {
     public static instance: nengi.Client
@@ -9,6 +10,8 @@ export class NengiClient {
     static update(delta: number, now: number) {
         this.instance.update()
     }
+
+    static state = {}
 
     static init() {
         const instance = new nengi.Client(nengiConfig, 100)
@@ -20,8 +23,8 @@ export class NengiClient {
             console.log(`Server MOTD: ${ message.text }`)
         })
 
-        // TODO add createhooks
-        clientHooks(instance, () => { })
+        // TODO add real state
+        clientHooks(instance, createHooks(this.state))
 
         NengiClient.instance = instance
     }
