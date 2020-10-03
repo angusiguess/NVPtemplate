@@ -3,17 +3,14 @@ import { nengiConfig } from '../../shared/nengi-config'
 import { clientHooks } from './client-hooks'
 import { LoginNotice } from '../../shared/messages/LoginNotice'
 import { createHooks } from '../hooks/entity-create-hooks'
-import { frameState, releaseKeys } from '../input';
+import { InputManager } from '../input/input';
 import PlayerInput from '../../shared/commands/PlayerInput';
 
 export class NengiClient {
     public static instance: nengi.Client
 
     static update(delta: number, now: number) {
-        const { up, down, left, right } = frameState
-        this.instance.addCommand(new PlayerInput(up, down, left, right, delta))
-        this.instance.update()
-        releaseKeys()
+        NengiClient.instance.update()
     }
 
     static state = {}
