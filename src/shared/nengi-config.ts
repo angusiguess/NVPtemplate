@@ -4,7 +4,7 @@ import { SharedPlayer } from './entities/player.shared'
 import PlayerInput from './commands/PlayerInput';
 
 export const nengiConfig = {
-    UPDATE_RATE: 20,
+    UPDATE_RATE: 10,
 
     ID_BINARY_TYPE: nengi.UInt16,
     TYPE_BINARY_TYPE: nengi.UInt8,

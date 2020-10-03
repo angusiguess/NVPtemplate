@@ -6,30 +6,20 @@ import { LoginNotice } from '../../shared/messages/LoginNotice'
 import { ServerPlayer } from '../entities/player.server'
 
 export class NengiServer {
-    public static instance: nengi.Instance
+    instance!: nengi.Instance
+    entities: Map<any, any> = new Map()
+    isRunning = false
 
-    public static entities: Map<any, any>
+    constructor() { }
 
-    static update(delta, tick, now) {
-        NengiServer.instance.emitCommands()
-
-        this.entities.forEach(entity => {
-            if(entity.update) {
-                entity.update(delta)
-            }
-        })
-
-        NengiServer.instance.update()
-    }
-
-    static init() {
+    start(port: number) {
         // TODO Parameterize port
         console.log('Initializing Nengi Server')
-        const instance = new nengi.Instance(nengiConfig, { port: 8000 })
+        const instance = new nengi.Instance(nengiConfig, { port })
         // Register server hooks on the instance
         serverHooks(instance)
 
-        NengiServer.entities = new Map()
+        this.entities = new Map()
 
         instance.on('connect', ({ client, callback }) => {
             console.log('Client Connected')
@@ -39,7 +29,7 @@ export class NengiServer {
             const entity = new ServerPlayer()
             instance.addEntity(entity)
             if(entity.nid) {
-                NengiServer.entities.set(entity.nid, entity)
+                this.entities.set(entity.nid, entity)
             }
             client.entity = entity
 
@@ -57,7 +47,7 @@ export class NengiServer {
 
         instance.on('disconnect', client => {
             // If we remove this after removeEntity it sticks around in state
-            NengiServer.entities.delete(client.entity.nid)
+            this.entities.delete(client.entity.nid)
             instance.removeEntity(client.entity)
             console.log('Client Disconnected')
         })
@@ -80,6 +70,21 @@ export class NengiServer {
             }
         })
         
-        NengiServer.instance = instance
+        this.instance = instance
+        this.isRunning = true
+    }
+
+    update(delta, now) {
+        if(this.isRunning) {
+            this.instance.emitCommands()
+
+            this.entities.forEach(entity => {
+                if(entity.update) {
+                    entity.update(delta)
+                }
+            })
+
+            this.instance.update()
+        }
     }
 }

@@ -11,7 +11,9 @@ function highResolutionTimeStamp() {
 }
 
 NengiClient.init()
-NengiClient.instance.connect('ws://localhost:8000')
+const wsAddress = `ws://localhost:${4050 + ~~(Math.random()*5)}`
+NengiClient.instance.connect(wsAddress)
+logger.log(`### Connecting to ${wsAddress}`)
 
 const state = {}
 
