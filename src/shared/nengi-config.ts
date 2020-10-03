@@ -1,6 +1,7 @@
 import nengi from 'nengi'
 import { LoginNotice } from './messages/LoginNotice'
 import { SharedPlayer } from './entities/player.shared'
+import PlayerInput from './commands/PlayerInput';
 
 export const nengiConfig = {
     UPDATE_RATE: 20,
@@ -23,6 +24,7 @@ export const nengiConfig = {
             ['LoginNotice', LoginNotice]
         ],
         commands: [
+            ['PlayerInput', PlayerInput]
         ],
         basics: []
     }
