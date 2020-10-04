@@ -3,6 +3,7 @@ import { nengiConfig } from '../shared/nengi-config'
 import { NengiClient } from './networking/nengi-client'
 import GameRenderer from './rendering/game-renderer'
 import { GameUI } from './ui/initialize-ui'
+import GameClient from './game-client'
 import logger from '../shared/logger'
 
 function highResolutionTimeStamp() {
@@ -21,13 +22,13 @@ window.onload = () => {
     GameRenderer.instance.initialize(<HTMLCanvasElement>document.getElementById("main-canvas"))
     let previous = highResolutionTimeStamp()
 
+    const client = new GameClient()
+
     const loop = () => {
         const now = highResolutionTimeStamp()
         const delta = (now - previous) / 1000
         previous = now
-        NengiClient.instance.readNetworkAndEmit()
-        NengiClient.update(delta, now)
-        GameRenderer.instance.update(delta, now)
+        client.update(delta, now)
         window.requestAnimationFrame(loop)
     }
 

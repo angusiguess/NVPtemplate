@@ -11,8 +11,8 @@ export class SharedPlayer {
 
     static protocol = {
         id: { type: nengi.ASCIIString },
-        x: {type: nengi.Int16 },
-        y: {type : nengi.Int16 },
+        x: { type: nengi.Number, interp: true },
+        y: { type: nengi.Number, interp: true },
     }
 
     constructor() {

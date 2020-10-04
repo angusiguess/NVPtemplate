@@ -23,8 +23,8 @@ export default class GameRenderer {
 		this.canvas = element
 
 		this.renderer = autoDetectRenderer({
-			width: element.width,
-			height: element.height,
+			width: element.clientWidth,
+			height: element.clientHeight,
 			view: this.canvas,
 			antialias: false,
 			resolution: 1,
@@ -45,11 +45,21 @@ export default class GameRenderer {
 	}
 
 	createDummySprites() {
-		const derpySprite = new Sprite('./characters/eyeball_1.png')
-		derpySprite.position.set(100, 50)
-		this.backgroundLayer.addChild(derpySprite)
+		let sprites: Sprite[] = []
+		for(let x = 0; x <= 10; x++) {
+			for(let y = 0; y <= 10; y++) {
+				const derpySprite = new Sprite('./characters/eyeball_1.png')
+				derpySprite.scale.set(2,2)
+				derpySprite.position.set(300+x*25, 200+y*25)
+				this.backgroundLayer.addChild(derpySprite)
+				sprites.push(derpySprite)
+			}
+		}
 		setInterval(() => {
-			derpySprite.rotation += 0.2
+			sprites.forEach((sprite) => {
+				sprite.rotation += 0.2
+			})
 		}, 17)
+
 	}
 }

@@ -12,6 +12,7 @@ export class ClientPlayer extends SharedPlayer {
 
 		this.sprite = new Sprite('./characters/eyeball_1.png')
 		this.sprite.position.set(this.x, this.y)
+		this.sprite.scale.set(2,2)
 	}
 }
 
