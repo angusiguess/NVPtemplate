@@ -6,6 +6,8 @@
       "ES2020",
       "DOM"
     ],
+    "baseUrl": ".",
+    "paths": { "nengi": ["src/nengi-shim.d.ts"] },
     "allowJs": true,
     "jsx": "preserve",
     "sourceMap": true,
